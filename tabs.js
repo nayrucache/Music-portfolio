@@ -23,7 +23,7 @@
     return String(n).padStart(2, "0");
   }
 
-  function switchTo(name) {
+ function switchTo(name) {
     const panels = document.querySelectorAll("[data-panel]");
     panels.forEach((panel) => {
       const match = panel.dataset.panel === name;
@@ -37,6 +37,12 @@
         link.removeAttribute("aria-current");
       }
     });
+
+    // Hide the hero/header when not on the tracks tab
+    const hero = document.querySelector(".hero");
+    if (hero) {
+      hero.hidden = name !== "tracks";
+    }
   }
 
   function renderProjects() {

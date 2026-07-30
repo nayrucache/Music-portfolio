@@ -291,7 +291,7 @@ main {
 }
 
 .hero-title {
-  font-size: clamp(36px, 6vw, 64px);
+  font-size: clamp(24px, 6vw, 40px);
   font-weight: 300;
   line-height: 1.1;
   margin: 0 0 24px;
@@ -905,7 +905,7 @@ main {
 /* Queue panel */
 .queue-panel {
   position: absolute;
-  left: 24px;
+  right: 24px;
   bottom: calc(var(--player-height) + 8px);
   width: 320px;
   max-height: 360px;
@@ -1102,5 +1102,3 @@ main {
   color: var(--text-faint);
   text-transform: uppercase;
 }
-
-//
