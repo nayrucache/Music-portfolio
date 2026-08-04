@@ -930,7 +930,7 @@ main {
     gap: 10px;
   }
   body {
-    padding-bottom: 220px;
+    padding-bottom: 190px;
   }
   .player-art {
     display: none;
@@ -940,6 +940,35 @@ main {
   }
   .player-right {
     justify-content: center;
+  }
+  .ctrl {
+    width: 30px;
+    height: 30px;
+  }
+  .ctrl-play {
+    width: 34px;
+    height: 34px;
+  }
+  .player-controls {
+    gap: 4px;
+  }
+  .player-center {
+    gap: 4px;
+  }
+  .waveform {
+    height: 28px;
+  }
+  .player-title {
+    font-size: 16px;
+  }
+  .player-artist {
+    font-size: 12px;
+  }
+  .time {
+    font-size: 13px;
+  }
+  .waveform-placeholder {
+    font-size: 11px;
   }
 }
 
