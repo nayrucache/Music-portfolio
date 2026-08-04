@@ -1,8 +1,8 @@
 /**
  * Audio player.
  *
- * Owns a single <audio> element, renders the track grid, manages a queue,
- * wires up transport controls, keyboard shortcuts, and the waveform scrub.
+ * Owns a single <audio> element, renders the track grid, wires up
+ * transport controls, keyboard shortcuts, and the waveform scrub.
  * Coordinates with Visualizer for live frequency bars.
  */
 
@@ -11,7 +11,6 @@
 
   // ---------- State ----------
   const state = {
-    queue: [],          // array of track indices (in TRACKS)
     currentIndex: -1,   // index into TRACKS, or -1
     isPlaying: false,
     volume: 0.8,
@@ -40,16 +39,12 @@
       btnPrev: $("btn-prev"),
       btnNext: $("btn-next"),
       btnMute: $("btn-mute"),
-      btnQueue: $("btn-queue"),
-      btnQueueClear: $("btn-queue-clear"),
       iconPlay: $("icon-play"),
       iconPause: $("icon-pause"),
       iconVol: $("icon-vol"),
       iconMute: $("icon-mute"),
       volume: $("volume"),
       waveform: $("waveform"),
-      queuePanel: $("queue-panel"),
-      queueList: $("queue-list"),
     };
   }
 
@@ -102,11 +97,11 @@
           </svg>
         </span>
       `;
-      li.addEventListener("click", () => playTrack(idx, { replaceQueue: true }));
+      li.addEventListener("click", () => playTrack(idx));
       li.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          playTrack(idx, { replaceQueue: true });
+          playTrack(idx);
         }
       });
       dom.trackGrid.appendChild(li);
@@ -128,45 +123,6 @@
     dom.trackGrid.querySelectorAll(".track-card").forEach((el) => {
       const idx = parseInt(el.dataset.index, 10);
       el.dataset.active = idx === state.currentIndex ? "true" : "false";
-    });
-  }
-
-  // ---------- Queue ----------
-  function ensureQueued(index) {
-    if (!state.queue.includes(index)) state.queue.push(index);
-  }
-
-  function renderQueue() {
-    if (!dom.queueList) return;
-    dom.queueList.innerHTML = "";
-    if (state.queue.length === 0) {
-      const empty = document.createElement("li");
-      empty.className = "queue-item";
-      empty.style.color = "var(--text-faint)";
-      empty.style.justifyContent = "center";
-      empty.style.fontFamily = "var(--font-mono)";
-      empty.style.fontSize = "11px";
-      empty.style.letterSpacing = "0.1em";
-      empty.textContent = "queue empty";
-      dom.queueList.appendChild(empty);
-      return;
-    }
-    state.queue.forEach((trackIdx, position) => {
-      const track = TRACKS[trackIdx];
-      if (!track) return;
-      const li = document.createElement("li");
-      li.className = "queue-item";
-      if (trackIdx === state.currentIndex) li.dataset.current = "true";
-      li.innerHTML = `
-        <span class="queue-item-index">${padIndex(position + 1)}</span>
-        <span class="queue-item-title">${escapeHtml(track.title)}</span>
-        <button type="button" class="queue-item-remove" data-remove="${trackIdx}" aria-label="Remove from queue">×</button>
-      `;
-      li.addEventListener("click", (e) => {
-        if (e.target.closest("[data-remove]")) return;
-        playTrack(trackIdx);
-      });
-      dom.queueList.appendChild(li);
     });
   }
 
@@ -212,19 +168,13 @@
     dom.timeTotal.textContent = "00:00";
   }
 
-  async function playTrack(index, opts = {}) {
+  async function playTrack(index) {
     if (index < 0 || index >= TRACKS.length) return;
-    if (opts.replaceQueue) {
-      state.queue = [index];
-    } else {
-      ensureQueued(index);
-    }
     state.currentIndex = index;
     const track = TRACKS[index];
     loadAudio(track);
     updateMeta(track);
     highlightActiveCard();
-    renderQueue();
 
     // Browsers require resume() to be called synchronously within a real
     // user-gesture handler chain. The `await` below is fine because we are
@@ -282,7 +232,7 @@
   function togglePlay() {
     if (state.currentIndex === -1) {
       // Nothing loaded — load the first track and play
-      if (TRACKS.length > 0) playTrack(0, { replaceQueue: true });
+      if (TRACKS.length > 0) playTrack(0);
       return;
     }
     if (audio.paused) {
@@ -294,14 +244,7 @@
 
   function next() {
     if (TRACKS.length === 0) return;
-    const pos = state.queue.indexOf(state.currentIndex);
-    let nextIdx;
-    if (pos >= 0 && pos < state.queue.length - 1) {
-      nextIdx = state.queue[pos + 1];
-    } else {
-      // Wrap around to first queued track, or first in catalogue
-      nextIdx = state.queue[0] ?? 0;
-    }
+    const nextIdx = state.currentIndex < TRACKS.length - 1 ? state.currentIndex + 1 : 0;
     playTrack(nextIdx);
   }
 
@@ -310,14 +253,8 @@
       audio.currentTime = 0;
       return;
     }
-    const pos = state.queue.indexOf(state.currentIndex);
-    let prevIdx;
-    if (pos > 0) {
-      prevIdx = state.queue[pos - 1];
-    } else {
-      prevIdx = state.queue[state.queue.length - 1] ?? state.currentIndex;
-      if (prevIdx === undefined || prevIdx === state.currentIndex) return;
-    }
+    if (TRACKS.length === 0) return;
+    const prevIdx = state.currentIndex > 0 ? state.currentIndex - 1 : TRACKS.length - 1;
     playTrack(prevIdx);
   }
 
@@ -412,25 +349,12 @@
     dom.btnMute.setAttribute("aria-label", muted ? "Unmute" : "Mute");
   }
 
-  // ---------- Queue panel ----------
-  function toggleQueuePanel(force) {
-    const isOpen = !dom.queuePanel.hidden;
-    const next = force === undefined ? !isOpen : force;
-    dom.queuePanel.hidden = !next;
-    dom.btnQueue.setAttribute("aria-expanded", String(next));
-  }
-
   // ---------- Wiring ----------
   function wireEvents() {
     dom.btnPlay.addEventListener("click", togglePlay);
     dom.btnPrev.addEventListener("click", prev);
     dom.btnNext.addEventListener("click", next);
     dom.btnMute.addEventListener("click", toggleMute);
-    dom.btnQueue.addEventListener("click", () => toggleQueuePanel());
-    dom.btnQueueClear.addEventListener("click", () => {
-      state.queue = state.currentIndex >= 0 ? [state.currentIndex] : [];
-      renderQueue();
-    });
 
     dom.volume.addEventListener("input", (e) => {
       setVolume(parseFloat(e.target.value));
@@ -475,22 +399,6 @@
         e.preventDefault();
         setVolume(state.volume - 0.05);
       }
-    });
-
-    // Close queue panel on outside click
-    document.addEventListener("click", (e) => {
-      if (dom.queuePanel.hidden) return;
-      if (dom.queuePanel.contains(e.target) || dom.btnQueue.contains(e.target)) return;
-      toggleQueuePanel(false);
-    });
-
-    // Listen for queue remove buttons via delegation
-    dom.queueList.addEventListener("click", (e) => {
-      const btn = e.target.closest("[data-remove]");
-      if (!btn) return;
-      const idx = parseInt(btn.dataset.remove, 10);
-      state.queue = state.queue.filter((i) => i !== idx);
-      renderQueue();
     });
   }
 
