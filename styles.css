@@ -941,11 +941,6 @@ main {
   .player-right {
     justify-content: center;
   }
-  .queue-panel {
-    width: calc(100% - 32px);
-    left: 16px;
-    right: auto;
-  }
 }
 
 /* ---------- Reduced motion ---------- */
