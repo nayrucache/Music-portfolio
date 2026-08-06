@@ -32,13 +32,6 @@ const TRACKS = [
   duration: 104,
   },
   {
-  id: "t_004",
-  title: "0729",
-  artist: ":English",
-  src: "assets/audio/0729.wav",
-  duration: 94,
-  },
-  {
   id: "t_002",
   title: "0715",
   artist: ":English",
