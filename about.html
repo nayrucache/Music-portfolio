@@ -84,35 +84,48 @@
         </div>
       </section>
 
-      <section class="about-contact" aria-labelledby="contact-title">
+      <section id="contact" class="contact-section about-contact" aria-labelledby="contact-title">
         <div class="section-header">
           <h2 id="contact-title" class="section-title">
             <span class="bracket">[</span> CONTACT <span class="bracket">]</span>
           </h2>
         </div>
 
-        <ul class="contact-list">
-          <li class="contact-item">
-            <span class="contact-label">Email</span>
-            <a class="contact-value" href="mailto:you@example.com">you@example.com</a>
-          </li>
-          <li class="contact-item">
-            <span class="contact-label">Bandcamp</span>
-            <a class="contact-value" href="https://bandcamp.com/" target="_blank" rel="noopener noreferrer">bandcamp.com/yourname</a>
-          </li>
-          <li class="contact-item">
-            <span class="contact-label">SoundCloud</span>
-            <a class="contact-value" href="https://soundcloud.com/" target="_blank" rel="noopener noreferrer">soundcloud.com/yourname</a>
-          </li>
-          <li class="contact-item">
-            <span class="contact-label">Instagram</span>
-            <a class="contact-value" href="https://instagram.com/" target="_blank" rel="noopener noreferrer">@yourname</a>
-          </li>
-        </ul>
+        <div class="contact-grid">
+          <aside class="contact-card" aria-label="Direct contact details">
+            <p class="contact-eyebrow">// DIRECT_LINE</p>
+            <p class="contact-row">
+              <span class="contact-label">Email</span>
+              <a class="contact-value" href="mailto:watshamsam@gmail.com">watshamsam@gmail.com</a>
+            </p>
+            <p class="contact-row">
+              <span class="contact-label">Location</span>
+              <span class="contact-value">New York, NY</span>
+            </p>
+          </aside>
 
-        <p class="about-contact-edit-note">
-          <span class="bracket">[</span> EDIT THIS — replace placeholders in <code>about.html</code> <span class="bracket">]</span>
-        </p>
+          <form class="contact-form" id="contact-form" novalidate>
+            <p class="contact-eyebrow">// TRANSMIT</p>
+
+            <label class="field">
+              <span class="field-label">Name</span>
+              <input class="field-input" name="name" type="text" required autocomplete="name" />
+            </label>
+
+            <label class="field">
+              <span class="field-label">Email</span>
+              <input class="field-input" name="email" type="email" required autocomplete="email" />
+            </label>
+
+            <label class="field">
+              <span class="field-label">Message</span>
+              <textarea class="field-input field-textarea" name="message" rows="5" required></textarea>
+            </label>
+
+            <button type="submit" class="btn-submit">TRANSMIT →</button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
       </section>
 
       <p class="about-back">
@@ -121,5 +134,6 @@
     </main>
 
     <script src="js/theme.js"></script>
+    <script src="js/contact.js"></script>
   </body>
 </html>

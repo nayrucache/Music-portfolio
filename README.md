@@ -96,6 +96,26 @@ under `:root`; dark overrides are under `[data-theme="dark"]`.
 | `--font-sans`   | Body / UI font                           |
 | `--font-mono`   | Monospace font (numerals, time codes)    |
 
+## Editing contact info
+
+The contact section lives on both the homepage and `about.html`. To
+change where messages go:
+
+1. Open `js/contact.js` and edit the `TO` constant near the top:
+
+   ```js
+   const TO = "watshamsam@gmail.com";
+   ```
+
+2. Update the matching `mailto:` link in the direct-line card on
+   `index.html` and `about.html` so the clickable link stays in sync.
+
+The form has no backend — submitting it opens the visitor's mail client
+with a pre-filled message. To send messages through a real form
+backend, swap the `window.location.href = buildMailto(data)` line in
+`js/contact.js` for a `fetch()` to Formspree, Netlify Forms, or your
+own endpoint.
+
 ## File map
 
 ```
@@ -109,7 +129,8 @@ portfolio/
 │   ├── tabs.js         # tab switching + project rendering
 │   ├── player.js       # controls, state, queue
 │   ├── waveform.js     # Web Audio peaks → SVG
-│   └── visualizer.js   # AnalyserNode → canvas bars
+│   ├── visualizer.js   # AnalyserNode → canvas bars
+│   └── contact.js      # contact form validation + mailto: submit
 ├── assets/
 │   ├── audio/          # drop music tracks here
 │   └── projects/       # drop project images here
