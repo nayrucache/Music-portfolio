@@ -135,6 +135,14 @@
     });
 
     renderProjects();
+
+    // Honor an initial hash so deep links like index.html#projects land
+    // on the right tab when arriving from another page.
+    const initial = (window.location.hash || "").replace(/^#/, "");
+    const validNames = ["tracks", "projects"];
+    if (validNames.includes(initial)) {
+      switchTo(initial);
+    }
   }
 
   if (document.readyState === "loading") {

@@ -1,8 +1,8 @@
 /**
  * Audio player.
  *
- * Owns a single <audio> element, renders the track grid, wires up
- * transport controls, keyboard shortcuts, and the waveform scrub.
+ * Owns a single <audio> element, renders the track grid,
+ * wires up transport controls, keyboard shortcuts, and the waveform scrub.
  * Coordinates with Visualizer for live frequency bars.
  */
 
@@ -232,7 +232,7 @@
   function togglePlay() {
     if (state.currentIndex === -1) {
       // Nothing loaded — load the first track and play
-      if (TRACKS.length > 0) playTrack(0);
+      if (TRACKS.length > 0) playTrack(0, { replaceQueue: true });
       return;
     }
     if (audio.paused) {
@@ -244,17 +244,18 @@
 
   function next() {
     if (TRACKS.length === 0) return;
-    const nextIdx = state.currentIndex < TRACKS.length - 1 ? state.currentIndex + 1 : 0;
+    const nextIdx = (state.currentIndex + 1) % TRACKS.length;
     playTrack(nextIdx);
   }
 
   function prev() {
-    if (!audio || audio.currentTime > 3) {
+    if (TRACKS.length === 0) return;
+    if (audio && audio.currentTime > 3) {
       audio.currentTime = 0;
       return;
     }
-    if (TRACKS.length === 0) return;
-    const prevIdx = state.currentIndex > 0 ? state.currentIndex - 1 : TRACKS.length - 1;
+    const prevIdx = (state.currentIndex - 1 + TRACKS.length) % TRACKS.length;
+    if (prevIdx === state.currentIndex) return;
     playTrack(prevIdx);
   }
 

@@ -26,10 +26,10 @@ const TRACKS = [
   // },
   {
   id: "t_001",
-  title: "0404",
+  title: "0729",
   artist: ":English",
-  src: "assets/audio/0404.wav",
-  duration: 104,
+  src: "assets/audio/0729.wav",
+  duration: 94,
   },
   {
   id: "t_002",
@@ -38,15 +38,8 @@ const TRACKS = [
   src: "assets/audio/0715.wav",
   duration: 60,
   },
-  {
+    {
   id: "t_003",
-  title: "0729",
-  artist: ":English",
-  src: "assets/audio/0729.wav",
-  duration: 94,
-  },
-  {
-  id: "t_004",
   title: "0722",
   artist: ":English",
   src: "assets/audio/0722.wav",
