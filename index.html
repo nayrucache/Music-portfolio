@@ -102,6 +102,26 @@
         </p>
       </section>
 
+      <section
+        id="now-playing-bar"
+        class="now-playing-bar"
+        aria-label="Now playing"
+      >
+        <div class="npb-eyebrow">
+          <span class="npb-eyebrow-dot" aria-hidden="true"></span>
+          NOW_PLAYING
+        </div>
+        <div class="npb-viewport">
+          <div class="npb-track" id="npb-track">
+            <span class="npb-title" id="npb-title">— no track loaded —</span>
+            <span class="npb-sep" aria-hidden="true">◆</span>
+            <span class="npb-artist" id="npb-artist">awaiting input</span>
+            <span class="npb-sep" aria-hidden="true">◆</span>
+            <span class="npb-time" id="npb-time" aria-live="polite">00:00 / 00:00</span>
+          </div>
+        </div>
+      </section>
+
       <section id="contact" class="contact-section" aria-labelledby="contact-title">
         <div class="section-header">
           <h2 id="contact-title" class="section-title">
@@ -266,6 +286,7 @@
     <script src="js/visualizer.js"></script>
     <script src="js/waveform.js"></script>
     <script src="js/player.js"></script>
+    <script src="js/marquee.js"></script>
     <script src="js/contact.js"></script>
 
     <!-- The audio element lives in the DOM so Web Audio's
